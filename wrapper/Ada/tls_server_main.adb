@@ -19,6 +19,8 @@
 -- Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1335, USA
 --
 
+pragma Restrictions (No_Secondary_Stack);
+
 with Tls_Server; pragma Elaborate_All (Tls_Server);
 
 --  SPARK wrapper package around GNAT Library packages.
