@@ -1,25 +1,31 @@
-project WolfSSL_Examples is
+with "config/wolfsslada_config.gpr";
+project Wolfsslada is
+   for Languages use ("C", "Ada");
 
    type OS_Kind is ("Windows", "Linux_Or_Mac");
 
    OS : OS_Kind := external ("OS", "Linux_Or_Mac");
 
-   for Languages use ("C", "Ada");
+   for Library_Name use "Wolfsslada";
+   for Library_Version use Project'Library_Name & ".so." & Wolfsslada_Config.Crate_Version;
 
-   for Source_Dirs use (".",
+   for Source_Dirs use ("src/",
+                        "config/",
                         "../../",
                         "../../src",
                         "../../wolfcrypt/src");
+   for Object_Dir use "obj/" & Wolfsslada_Config.Build_Profile;
+   for Create_Missing_Dirs use "True";
+   for Library_Dir use "lib";
 
-   for Object_Dir use "obj";
-
-   for Main use ("tls_server_main.adb", "tls_client_main.adb");
-
-   package Naming is
-      for Spec_Suffix ("C") use ".h";
-   end Naming;
+   type Library_Type_Type is ("relocatable", "static", "static-pic");
+   Library_Type : Library_Type_Type :=
+     external ("WOLFSSLADA_LIBRARY_TYPE", external ("LIBRARY_TYPE", "static"));
+   for Library_Kind use Library_Type;
 
    package Compiler is
+      for Default_Switches ("Ada") use Wolfsslada_Config.Ada_Compiler_Switches;
+
       for Switches ("C") use
          ("-DWOLFSSL_USER_SETTINGS", --  Use the user_settings.h file.
           "-Wno-pragmas",
@@ -55,25 +61,14 @@ project WolfSSL_Examples is
           "-Wunused-variable",
           "-Wwrite-strings",
           "-fwrapv");
-
-      for Switches ("Ada") use ("-g");
    end Compiler;
 
-   package Linker is
-      case OS is
-         when "Windows" =>
-            for Switches ("Ada") use
-               ("-lm",         --  To include the math library (used by WolfSSL).
-                "-lcrypt32");  --  Needed on Windows.
-
-         when "Linux_Or_Mac" =>
-            for Switches ("Ada") use
-               ("-lm");  --  To include the math library (used by WolfSSL).
-      end case;
-   end Linker;
-
    package Binder is
-      for Switches ("Ada") use ("-Es");  --  To include stack traces.
+      for Switches ("Ada") use ("-Es"); --  Symbolic traceback
    end Binder;
 
-end WolfSSL_Examples;
+   package Install is
+      for Artifacts (".") use ("share");
+   end Install;
+
+end Wolfsslada;

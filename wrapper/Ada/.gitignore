@@ -1,0 +1,7 @@
+/obj/
+/lib/
+/alire/
+/config/
+
+tls_server_main
+tls_client_main

@@ -1,0 +1,9 @@
+name = "wolfssl_examples"
+description = "Shiny new project"
+version = "0.1.0-dev"
+
+authors = ["Joakim Strandberg"]
+maintainers = ["Joakim Strandberg <joakim@mequinox.se>"]
+maintainers-logins = ["joakim-strandberg"]
+
+executables = ["tls_client_main", "tls_server_main"]

@@ -1,0 +1,7 @@
+name = "wolfsslada"
+description = "Ada binding to wolfSSL"
+version = "5.6.3"
+
+authors = ["Joakim Strandberg"]
+maintainers = ["Joakim Strandberg <joakimds@kth.se>"]
+maintainers-logins = ["joakim-strandberg"]
